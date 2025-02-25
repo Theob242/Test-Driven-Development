@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import trapz
+from scipy.integrate import trapz 
+from src.SignalDetection import SignalDetection as sdt #someone checks if this works
 
 class Experiment:
     def __init__(self):
@@ -12,18 +13,14 @@ class Experiment:
     def sorted_roc_points(self):
         if not self.conditions:
             raise ValueError("No conditions available to generate ROC points.")
-
-        
         roc_points = [(sdt.false_alarm_rate(), sdt.hit_rate()) for sdt, _ in self.conditions]
         roc_points.sort() 
-
         false_alarm_rates, hit_rates = zip(*roc_points)
         return list(false_alarm_rates), list(hit_rates)
 
     def compute_auc(self):
         if not self.conditions:
             raise ValueError("No conditions available to compute AUC.")
-
         false_alarm_rates, hit_rates = self.sorted_roc_points()
         return trapz(hit_rates, false_alarm_rates)  
 
