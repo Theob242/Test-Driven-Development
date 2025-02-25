@@ -14,9 +14,9 @@ class TestExperiment(unittest.TestCase):
 
     def test_sorted_roc_points(self):
         sdt1 = SignalDetection(30, 10, 10, 50) 
-        sdt2 = SignalDetection(40, 10, 20, 30)  
-        self.exp.add_condition(sdt2, "Cond B")
+        sdt2 = SignalDetection(40, 10, 20, 30)
         self.exp.add_condition(sdt1, "Cond A")
+        self.exp.add_condition(sdt2, "Cond B")
         false_alarm_rates, hit_rates = self.exp.sorted_roc_points()
         self.assertTrue(false_alarm_rates[0] <= false_alarm_rates[1])  
 
