@@ -15,24 +15,25 @@ class TestExperiment(unittest.TestCase):
     def test_sorted_roc_points(self):
         sdt1 = SignalDetection(30, 10, 10, 50) 
         sdt2 = SignalDetection(40, 10, 20, 30)
-        self.exp.add_condition(sdt1, "Cond A")
-        self.exp.add_condition(sdt2, "Cond B")
+        self.exp.add_condition(sdt1, "Condition 1")
+        self.exp.add_condition(sdt2, "Condition 2")
         false_alarm_rates, hit_rates = self.exp.sorted_roc_points()
-        self.assertTrue(false_alarm_rates[0] <= false_alarm_rates[1])  
+        self.assertTrue(false_alarm_rates[0] <= false_alarm_rates[1])
+        self.assertTrue(hit_rates[0] <= hit_rates[1])  
 
-    def test_compute_auc(self):
-        self.exp.add_condition(SignalDetection(50, 0, 0, 50), "Perfect")
-        self.exp.add_condition(SignalDetection(0, 50, 50, 0), "Worst")
+    def test_compute_auc_1(self): #test for when AUC = 1 when ROC goes from (0,1) to (1,1)
+        self.exp.add_condition(SignalDetection(50, 0, 0, 50), "Condition 1")
+        self.exp.add_condition(SignalDetection(0, 50, 50, 0), "Condition 2")
         auc = self.exp.compute_auc()
         self.assertAlmostEqual(auc, 1.0, places=3)  
 
-    def test_auc_for_linear_roc(self):
-        self.exp.add_condition(SignalDetection(0, 50, 0, 50), "Cond1")
-        self.exp.add_condition(SignalDetection(50, 0, 50, 0), "Cond2")
+    def test_compute_auc_point_5(self): #test for when AUC = 1 when ROC goes from (0,1) to (1,1)
+        self.exp.add_condition(SignalDetection(0, 50, 0, 50), "Condition 1")
+        self.exp.add_condition(SignalDetection(50, 0, 50, 0), "Condition 1")
         auc = self.exp.compute_auc()
         self.assertAlmostEqual(auc, 0.5, places=3) 
 
-    def test_empty_experiment_error(self):
+    def test_empty_experiment_error(self): 
         with self.assertRaises(ValueError):
             self.exp.sorted_roc_points()
         with self.assertRaises(ValueError):
