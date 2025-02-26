@@ -45,6 +45,15 @@ class TestExperiment(unittest.TestCase):
         self.assertEqual(len(false_alarm_rates), 1)
         self.assertEqual(len(hit_rates), 1)
 
+    def test_same_conditions(self):
+        self.exp.add_condition(SignalDetection(25, 25, 25, 50), "Condition 1")
+        self.exp.add_condition(SignalDetection(25, 25, 25, 25), "Condition 2")
+        false_alarm_rates, hit_rates = self.exp.sorted_roc_points()
+        self.assertEqual(len(false_alarm_rates), 2)
+        self.assertEqual(len(hit_rates), 2)
+        self.assertAlmostEqual(false_alarm_rates[0], false_alarm_rates[1])
+        self.assertAlmostEqual(hit_rates[0], hit_rates[1])
+
     def test_plot_roc_curve(self):
         self.exp.add_condition(SignalDetection(30, 10, 20, 40), "Plot Test")
         try:
