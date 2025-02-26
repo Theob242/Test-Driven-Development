@@ -1,6 +1,6 @@
 import unittest
-from src.Experiment import Experiment
-from src.SignalDetection import SignalDetection
+from Experiment import Experiment
+from SignalDetection import SignalDetection
 
 class TestExperiment(unittest.TestCase):
 
